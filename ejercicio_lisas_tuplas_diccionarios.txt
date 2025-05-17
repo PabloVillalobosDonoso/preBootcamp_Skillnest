@@ -1,0 +1,234 @@
+Ejercicios Listas, Tuplas y diccionarios (Core)
+
+1. CARGA DE DATOS
+Lista original:
+
+ventas = [
+    {"fecha": '2025-03-22', "producto":"Coca-cola", "cantidad":2, "precio":2400.00},
+    {"fecha": '2025-05-14', "producto":"Juego ps4", "cantidad":2, "precio":7500.00},
+    {"fecha": '2025-05-16', "producto":"Remedios", "cantidad":3, "precio":4990.00},
+    {"fecha": '2025-05-13', "producto":"Manga", "cantidad":1, "precio":12990.00},
+    {"fecha": '2025-05-05', "producto":"Kem treme", "cantidad":2, "precio":950.00},
+    {"fecha": '2025-05-05', "producto":"Cochocolate", "cantidad":2, "precio":1000.00},
+    {"fecha": '2025-05-10', "producto":"Pan", "cantidad":9, "precio":250.00},
+    {"fecha": '2025-05-14', "producto":"Bidon de agua", "cantidad":1, "precio":4000.00},
+    {"fecha": '2025-05-16', "producto":"Leche", "cantidad":2, "precio":1290.00},
+    {"fecha": '2025-05-01', "producto":"Cereal", "cantidad":1, "precio":3800.00},
+    {"fecha": '2025-05-07', "producto":"Arroz", "cantidad":4, "precio":1790.00},
+    {"fecha": '2025-03-22', "producto":"Coca-cola", "cantidad":2, "precio":2400.00},
+    {"fecha": '2025-03-22', "producto":"Coca-cola", "cantidad":2, "precio":2400.00},
+    {"fecha": '2025-03-22', "producto":"Coca-cola", "cantidad":4, "precio":2400.00},
+    {"fecha": '2025-03-22', "producto":"Coca-cola", "cantidad":4, "precio":2400.00},
+    {"fecha": '2025-05-16', "producto":"Leche", "cantidad":2, "precio":1290.00},
+    {"fecha": '2025-05-14', "producto":"Aceite", "cantidad":6, "precio":2200.00},
+    {"fecha": '2025-05-08', "producto":"Helado", "cantidad":2, "precio":1290.00},
+    {"fecha": '2025-05-12', "producto":"Leche", "cantidad":3, "precio":1290.00},
+    {"fecha": '2025-05-10', "producto":"Doritos", "cantidad":1, "precio":1690.00},
+    {"fecha": '2025-05-16', "producto":"Arroz", "cantidad":5, "precio":1790.00},
+    {"fecha": '2025-05-08', "producto":"Leche", "cantidad":2, "precio":1290.00},
+    {"fecha": '2025-05-11', "producto":"Pan", "cantidad":5, "precio":250.00},
+    {"fecha": '2025-05-02', "producto":"Leche", "cantidad":4, "precio":1290.00}
+]
+
+2. CALCULO DE INGRESOS TOTALES
+
+se creo una funcion llamada"calcular_ingresos_totales(ventas)", la cual recibe la lista de ventas original
+
+def calcular_ingresos_totales(lista):
+    total = 0
+    for i in range (len(lista)):
+        total += lista[i]["cantidad"] * lista[i]["precio"]
+    print("Ingresos totales: $" + str(total))
+
+La función recorre el largo de la lista y en cada iteración calcula el precio por la cantidad de productos vendidos. Luego se suman
+la variable "total" que esta inicializada en 0
+
+3. ANÁLISIS DEL PRODUCTO MÁS VENDIDO
+
+ventas_por_producto = {}  -> se crea un diccionario vacio
+llenar_ventas_por_producto(ventas_por_producto, ventas) -> se llama una funcion que recibira los 2 diccionarios actuales
+
+def llenar_ventas_por_producto(ventas_producto, ventas):
+    for i in range (len(ventas)):
+        nombre = ventas[i]["producto"]
+        try:
+            ventas_producto[ventas[i]["producto"]] = ventas[i]["cantidad"] + ventas_producto[nombre]
+        except:
+            ventas_producto[ventas[i]["producto"]] = ventas[i]["cantidad"]
+    print("------------VENTAS POR PRODUCTOS--------------")
+    for i in ventas_por_producto:
+        print(f"{i}\t{ventas_por_producto[i]}")
+
+Luego en la funcion se crea un bucle que recorre el largo de las ventas y luego se usa un try para ir acumulando las ventas de cada
+producto, si el producto aun no esta se usa el except para añadirlo. La variable "nombre" se implemento por comodidad.
+
+def identificar_mas_vendido(productos):
+    mas_vendido = []
+    cant_ventas = 0
+    for i in productos:
+        if productos[i] > cant_ventas:
+            mas_vendido.clear()
+            cant_ventas = productos[i]
+            mas_vendido.append(i)
+        elif productos[i] == cant_ventas:
+            mas_vendido.append(i)
+    mas_vendido.append(f"cantidad de ventas: {cant_ventas}")
+    return(mas_vendido)
+
+Despues se creo otra funcion para identificar el producto más vendido, como aqui los productos no estan repetidos es más fácil
+trabajar. se creo la lista "mas_vendido" en caso de que haya más de un producto con la cantidad más alta de ventas. En el bucle,
+en caso que un producto se haya vendido más que la variable "cant_ventas", se actualizara la variable y se limpiara la lista de
+"más vendidos" siendo llenada con el nuevo producto más vendido. En caso que la cantidad de ventas de un producto sea igual,
+solo se agregara el producto a "mas_vendido" y si es menor no hara nada
+
+4.PROMEDIO DE PRECIO POR PRODUCTO
+precios_por_producto = {} -> se crea un diccionario vacio
+
+def mostrar_suma_total_producto():
+    print("-----------------SUMA DE PRODUCTOS VENDIDOS------------------------")
+    for i in ventas_por_producto:
+        suma = sumar_unidades_vendidas(i)
+        precios_por_producto[i] = (suma,ventas_por_producto[i])
+    for i in precios_por_producto:
+        print("Cantidad de productos vendidos :", i ,precios_por_producto[i][1])
+        print("Precio promedio de ventas : $" + str(precios_por_producto[i][0]/(precios_por_producto[i][1])))
+
+En la función anterior se llena el diccionario llamando la funcion "sumar_unidades_vendidas" la cual retorna la suma de ventas de ese
+producto. Luego se crea la tupla, con la suma total de dinero generado por el producto y la cantidad total del producto vendido.
+Luego en el siguiente bucle se muestra la cantidad del producto y el promedio de ventas de este.
+
+def sumar_unidades_vendidas(producto):
+    suma = 0
+    for i in range (len(ventas)):
+        if ventas[i]["producto"] == producto:
+            suma += ventas[i]["precio"] * ventas[i]["cantidad"]
+    return suma
+
+Esta funcion esta para obtener la suma total de venta del producto ingresado.
+
+5.VENTAS POR DIA
+ingresos_por_dia = {} -> se crea el diccionario
+Luego se llama la funcion "llenar_ingresos_por_dia()"
+
+def llenar_ingresos_por_dia():
+    print("-------------------INGRESOS POR DIA---------------------")
+    for i in range (len(ventas)):
+        try:
+            ingresos_por_dia[ventas[i]["fecha"]] = (ventas[i]["precio"]*ventas[i]["cantidad"]) + ingresos_por_dia[ventas[i]["fecha"]]
+        except:
+            ingresos_por_dia[ventas[i]["fecha"]] = (ventas[i]["precio"]*ventas[i]["cantidad"])
+    for i in ingresos_por_dia:
+        print("Ingresos del día", i,": $" + str(ingresos_por_dia[i]))
+
+En esta funcion se iran agregando los ingresos del dia a dia. En caso de que el dia ya exista, los ingresos se iran sumando
+en el bloque "try", sino se iran agregando con el bloque "except" y al final se mostraran con el bucle "for"
+
+6.REPRESENTACIÓN DE DATOS
+resumen_ventas = {} -> se crea un diccionario vacio
+se llama a la función "crear_resumen_ventas()" para llenar y mostrar el diccionario
+
+def crear_resumen_ventas():
+    for i in ventas_por_producto:
+        precio_promedio = precios_por_producto[i][0]/(precios_por_producto[i][1])
+        resumen_ventas[i] = {"cantidad_total": ventas_por_producto[i], "ingresos_totales": precios_por_producto[i][0], "precio_promedio": precio_promedio}
+    print("---------RESUMEN DE VENTAS----------")
+    for i in resumen_ventas:
+        print(f"{i}\t\t\t Cantidad total: {resumen_ventas[i]["cantidad_total"]}, Total de ingresos: ${resumen_ventas[i]["ingresos_totales"]}, Precio Promedio: ${resumen_ventas[i]["precio_promedio"]}")
+
+En esta función, al contar ya con los datos solicitados solo se utilizo un bucle "for" e ir llenando los datos con diccionarios anteriores
+se accedio a "ventas_por_producto" para obtener los ingresos totales, "precios_por_producto" para obtener la cantidad vendida y el precio promedio
+luego todo se mostrara en un bucle for.
+
+A continuacion se mostraran los resultados obtenidos en pantalla:
+
+
+--------------INGRESOS TOTALES--------------------
+Ingresos totales: $142110.0
+------------VENTAS POR PRODUCTOS--------------
+Coca-cola       14
+Juego ps4       2
+Remedios        3
+Manga   1
+Kem treme       2
+Cochocolate     2
+Pan     14
+Bidon de agua   1
+Leche   13
+Cereal  1
+Arroz   9
+Aceite  6
+Helado  2
+Doritos 1
+---------------PRODUCTOS MAS VENDIDOS---------------
+El/los productos más vendido/s es/son: ['Coca-cola', 'Pan', 'cantidad de ventas: 14']
+-----------------SUMA DE PRODUCTOS VENDIDOS------------------------
+Cantidad de productos vendidos : Coca-cola 14
+Precio promedio de ventas : $2400.0
+
+Cantidad de productos vendidos : Juego ps4 2
+Precio promedio de ventas : $7500.0
+
+Cantidad de productos vendidos : Remedios 3
+Precio promedio de ventas : $4990.0
+
+Cantidad de productos vendidos : Manga 1
+Precio promedio de ventas : $12990.0
+
+Cantidad de productos vendidos : Kem treme 2
+Precio promedio de ventas : $950.0
+
+Cantidad de productos vendidos : Cochocolate 2
+Precio promedio de ventas : $1000.0
+
+Cantidad de productos vendidos : Pan 14
+Precio promedio de ventas : $250.0
+
+Cantidad de productos vendidos : Bidon de agua 1
+Precio promedio de ventas : $4000.0
+
+Cantidad de productos vendidos : Leche 13
+Precio promedio de ventas : $1290.0
+
+Cantidad de productos vendidos : Cereal 1
+Precio promedio de ventas : $3800.0
+
+Cantidad de productos vendidos : Arroz 9
+Precio promedio de ventas : $1790.0
+
+Cantidad de productos vendidos : Aceite 6
+Precio promedio de ventas : $2200.0
+
+Cantidad de productos vendidos : Helado 2
+Precio promedio de ventas : $1290.0
+
+Cantidad de productos vendidos : Doritos 1
+Precio promedio de ventas : $1690.0
+
+-------------------INGRESOS POR DIA---------------------
+Ingresos del día 2025-03-22 : $33600.0
+Ingresos del día 2025-05-14 : $32200.0
+Ingresos del día 2025-05-16 : $29080.0
+Ingresos del día 2025-05-13 : $12990.0
+Ingresos del día 2025-05-05 : $3900.0
+Ingresos del día 2025-05-10 : $3940.0
+Ingresos del día 2025-05-01 : $3800.0
+Ingresos del día 2025-05-07 : $7160.0
+Ingresos del día 2025-05-08 : $5160.0
+Ingresos del día 2025-05-12 : $3870.0
+Ingresos del día 2025-05-11 : $1250.0
+Ingresos del día 2025-05-02 : $5160.0
+---------RESUMEN DE VENTAS----------
+Coca-cola                        Cantidad total: 14, Total de ingresos: $33600.0, Precio Promedio: $2400.0
+Juego ps4                        Cantidad total: 2, Total de ingresos: $15000.0, Precio Promedio: $7500.0
+Remedios                         Cantidad total: 3, Total de ingresos: $14970.0, Precio Promedio: $4990.0
+Manga                    Cantidad total: 1, Total de ingresos: $12990.0, Precio Promedio: $12990.0
+Kem treme                        Cantidad total: 2, Total de ingresos: $1900.0, Precio Promedio: $950.0
+Cochocolate                      Cantidad total: 2, Total de ingresos: $2000.0, Precio Promedio: $1000.0
+Pan                      Cantidad total: 14, Total de ingresos: $3500.0, Precio Promedio: $250.0
+Bidon de agua                    Cantidad total: 1, Total de ingresos: $4000.0, Precio Promedio: $4000.0
+Leche                    Cantidad total: 13, Total de ingresos: $16770.0, Precio Promedio: $1290.0
+Cereal                   Cantidad total: 1, Total de ingresos: $3800.0, Precio Promedio: $3800.0
+Arroz                    Cantidad total: 9, Total de ingresos: $16110.0, Precio Promedio: $1790.0
+Aceite                   Cantidad total: 6, Total de ingresos: $13200.0, Precio Promedio: $2200.0
+Helado                   Cantidad total: 2, Total de ingresos: $2580.0, Precio Promedio: $1290.0
+Doritos                  Cantidad total: 1, Total de ingresos: $1690.0, Precio Promedio: $1690.0
