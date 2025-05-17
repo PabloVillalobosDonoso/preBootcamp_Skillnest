@@ -1,0 +1,1 @@
+Este repositorio contiene ejerccios y tareas realizados en el pre-bootcamp
